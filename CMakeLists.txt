@@ -1,10 +1,58 @@
 cmake_minimum_required(VERSION 2.8.9)
 project (BASELIB)
 set(CMAKE_CXX_FLAGS "-g -Wall -std=c++11")
+add_definitions(-DWEBRTC_POSIX -D__STDC_CONSTANT_MACROS -DWEBRTC_ANDROID -D__UCLIBC__ -DNDEBUG -DWEBRTC_LINUX -D__STDC_FORMAT_MACROS)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")	
 #base
 set (BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/base)
 set (BASE_SOURCE_FILES  ${BASE_DIR}/sigslot.cc
+						${BASE_DIR}/sigslot.h
+                        ${BASE_DIR}/basictypes.h
+						${BASE_DIR}/thread.h
+						${BASE_DIR}/thread.cc
+						${BASE_DIR}/constructormagic.h
+						${BASE_DIR}/event.h
+						${BASE_DIR}/event.cc
+						${BASE_DIR}/messagequeue.h
+						${BASE_DIR}/messagequeue.cc
+						${BASE_DIR}/checks.cc
+						${BASE_DIR}/checks.h
+						${BASE_DIR}/socketserver.h
+						${BASE_DIR}/nullsocketserver.h
+						${BASE_DIR}/nullsocketserver.cc
+						${BASE_DIR}/logging.cc
+						${BASE_DIR}/logging.h
+						${BASE_DIR}/location.h
+						${BASE_DIR}/location.cc
+						${BASE_DIR}/criticalsection.h
+						${BASE_DIR}/criticalsection.cc
+						${BASE_DIR}/timeutils.h
+						${BASE_DIR}/timeutils.cc
+						${BASE_DIR}/platform_thread.h
+						${BASE_DIR}/platform_thread.cc
+						${BASE_DIR}/event_tracer.h
+						${BASE_DIR}/event_tracer.cc
+						${BASE_DIR}/format_macros.h
+						${BASE_DIR}/physicalsocketserver.h
+						${BASE_DIR}/physicalsocketserver.cc
+						${BASE_DIR}/sharedexclusivelock.h
+						${BASE_DIR}/sharedexclusivelock.cc
+						${BASE_DIR}/messagehandler.h
+						${BASE_DIR}/messagehandler.cc
+						${BASE_DIR}/stringencode.h
+						${BASE_DIR}/stringencode.cc
+						${BASE_DIR}/asyncsocket.h
+						${BASE_DIR}/asyncsocket.cc
+						${BASE_DIR}/socketaddress.h
+						${BASE_DIR}/socketaddress.cc
+						${BASE_DIR}/ifaddrs-android.h
+						${BASE_DIR}/ifaddrs-android.cc
+						${BASE_DIR}/ipaddress.h
+						${BASE_DIR}/ipaddress.cc
+						${BASE_DIR}/nethelpers.h
+						${BASE_DIR}/nethelpers.cc
+						${BASE_DIR}/asyncfile.h
+						${BASE_DIR}/asyncfile.cc
 					)
 
 add_library( baselib
