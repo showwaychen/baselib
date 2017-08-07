@@ -53,6 +53,8 @@ set (BASE_SOURCE_FILES  ${BASE_DIR}/sigslot.cc
 						${BASE_DIR}/nethelpers.cc
 						${BASE_DIR}/asyncfile.h
 						${BASE_DIR}/asyncfile.cc
+						${BASE_DIR}/signalthread.cc
+						${BASE_DIR}/asyncresolverinterface.cc
 					)
 
 add_library( baselib
@@ -67,4 +69,7 @@ target_link_libraries( baselib
                       ${log-lib} )
 set (CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/android)					  
 INSTALL(TARGETS baselib
-				LIBRARY DESTINATION lib)				  
+				LIBRARY DESTINATION lib)	
+ADD_CUSTOM_COMMAND(TARGET baselib
+POST_BUILD
+COMMAND   ${CMAKE_STRIP} *.so )				
