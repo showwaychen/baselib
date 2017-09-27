@@ -56,10 +56,12 @@ set (BASE_SOURCE_FILES  ${BASE_DIR}/sigslot.cc
 						${BASE_DIR}/signalthread.cc
 						${BASE_DIR}/asyncresolverinterface.cc
 					)
-
+set(BASEANDROID_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/android)					
+set (BASE_ANDROIDSOURCE_FILES ${BASEANDROID_DIR}/jnihelper/*.cpp
+                              ${BASEANDROID_DIR}/jnihelper/*.h)
 add_library( baselib
              SHARED
-             ${BASE_SOURCE_FILES} )
+             ${BASE_SOURCE_FILES} ${BASE_ANDROIDSOURCE_FILES} )
 			 
 # 找到预编译库 log_lib 并link到我们的动态库 native-lib中
 find_library( # Sets the name of the path variable.
