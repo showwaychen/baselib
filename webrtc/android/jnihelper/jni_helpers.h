@@ -7,7 +7,7 @@
 #include <string>
 
 
-#define TAG "kuplay"
+#define TAG "jninative"
 
 // Abort the process if |x| is false, emitting |msg| to logcat.
 #define CHECK(x, msg)                                                  \
