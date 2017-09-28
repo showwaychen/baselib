@@ -56,11 +56,11 @@ set (BASE_SOURCE_FILES  ${BASE_DIR}/sigslot.cc
 						${BASE_DIR}/signalthread.cc
 						${BASE_DIR}/asyncresolverinterface.cc
 					)
-set(BASEANDROID_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/android)					
-set (BASE_ANDROIDSOURCE_FILES ${BASEANDROID_DIR}/jnihelper/*.cpp
-                              ${BASEANDROID_DIR}/jnihelper/*.h)
+set(BASEANDROID_DIR ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/android)					
+file(GLOB  BASE_ANDROIDSOURCE_FILES ${BASEANDROID_DIR}/jnihelper/*.cpp
+                               ${BASEANDROID_DIR}/jnihelper/*.h)
 add_library( baselib
-             SHARED
+             STATIC
              ${BASE_SOURCE_FILES} ${BASE_ANDROIDSOURCE_FILES} )
 			 
 # 找到预编译库 log_lib 并link到我们的动态库 native-lib中
@@ -71,7 +71,8 @@ target_link_libraries( baselib
                       ${log-lib} )
 set (CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/android)					  
 INSTALL(TARGETS baselib
-				LIBRARY DESTINATION lib)	
-ADD_CUSTOM_COMMAND(TARGET baselib
-POST_BUILD
-COMMAND   ${CMAKE_STRIP} *.so )				
+				LIBRARY DESTINATION lib
+				ARCHIVE DESTINATION lib)	
+#ADD_CUSTOM_COMMAND(TARGET baselib
+#POST_BUILD
+#COMMAND   ${CMAKE_STRIP} *.so )				
