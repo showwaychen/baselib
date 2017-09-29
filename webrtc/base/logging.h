@@ -192,6 +192,7 @@ class LogMessage {
   // Testing against MinLogSeverity allows code to avoid potentially expensive
   // logging operations by pre-checking the logging level.
   static int GetMinLogSeverity() { return min_sev_; }
+  static void SetMinLogSeverity(LoggingSeverity min_sev) { min_sev_ = min_sev; }
 
   // Parses the provided parameter stream to configure the options above.
   // Useful for configuring logging from the command line.
