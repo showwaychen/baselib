@@ -48,6 +48,74 @@ JNIEnv* GetEnv(JavaVM* jvm) {
  {
 	 return sl_jvm;
  }
+ jmethodID GetMethodID (
+    JNIEnv* jni, jclass c, const char* name, const char* signature) {
+  jmethodID m = jni->GetMethodID(c, name, signature);
+  MYCHECK_EXCEPTION(jni, "Error during GetMethodID: ");
+  return m;
+}
+
+jmethodID GetStaticMethodID (
+    JNIEnv* jni, jclass c, const char* name, const char* signature) {
+  jmethodID m = jni->GetStaticMethodID(c, name, signature);
+  MYCHECK_EXCEPTION(jni, "Error during GetStaticMethodID: ");
+  return m;
+}
+
+ jclass FindClass(JNIEnv* jni, const char* name) {
+  jclass c = jni->FindClass(name);
+  MYCHECK_EXCEPTION(jni, "Error during FindClass: ");
+  return c;
+}
+ // Java references to "null" can only be distinguished as such in C++ by
+// creating a local reference, so this helper wraps that logic.
+bool IsNull(JNIEnv* jni, jobject obj) {
+  ScopedLocalRefFrame local_ref_frame(jni);
+  return jni->NewLocalRef(obj) == NULL;
+}
+
+// Given a UTF-8 encoded |native| string return a new (UTF-16) jstring.
+jstring JavaStringFromStdString(JNIEnv* jni, const std::string& native) {
+  jstring jstr = jni->NewStringUTF(native.c_str());
+  MYCHECK_EXCEPTION(jni, "error during NewStringUTF");
+  return jstr;
+}
+
+// Given a (UTF-16) jstring return a new UTF-8 native string.
+std::string JavaToStdString(JNIEnv* jni, const jstring& j_string) {
+  const char* chars = jni->GetStringUTFChars(j_string, NULL);
+  MYCHECK_EXCEPTION(jni, "Error during GetStringUTFChars");
+  std::string str(chars, jni->GetStringUTFLength(j_string));
+  MYCHECK_EXCEPTION(jni, "Error during GetStringUTFLength");
+  jni->ReleaseStringUTFChars(j_string, chars);
+  MYCHECK_EXCEPTION(jni, "Error during ReleaseStringUTFChars");
+  return str;
+}
+
+// Return the (singleton) Java Enum object corresponding to |index|;
+jobject JavaEnumFromIndex(JNIEnv* jni, jclass state_class,
+                          const std::string& state_class_name, int index) {
+  jmethodID state_values_id = GetStaticMethodID(
+      jni, state_class, "values", ("()[L" + state_class_name  + ";").c_str());
+  jobjectArray state_values = static_cast<jobjectArray>(
+      jni->CallStaticObjectMethod(state_class, state_values_id));
+  MYCHECK_EXCEPTION(jni, "error during CallStaticObjectMethod");
+  jobject ret = jni->GetObjectArrayElement(state_values, index);
+  MYCHECK_EXCEPTION(jni,  "error during GetObjectArrayElement");
+  return ret;
+}
+
+jobject NewGlobalRef(JNIEnv* jni, jobject o) {
+  jobject ret = jni->NewGlobalRef(o);
+  MYCHECK_EXCEPTION(jni,  "error during NewGlobalRef");
+  return ret;
+}
+
+void DeleteGlobalRef(JNIEnv* jni, jobject o) {
+  jni->DeleteGlobalRef(o);
+  MYCHECK_EXCEPTION(jni, "error during DeleteGlobalRef");
+}
+
 ClassReferenceHolder::ClassReferenceHolder(JNIEnv* jni, char** classes,
 	int size) {
 	for (int i = 0; i < size; ++i) {
@@ -110,3 +178,10 @@ AttachThreadScoped::~AttachThreadScoped() {
 }
 
 JNIEnv* AttachThreadScoped::env() { return env_; }
+
+ScopedLocalRefFrame::ScopedLocalRefFrame(JNIEnv* jni) : jni_(jni) {
+  jni_->PushLocalFrame(0);
+}
+ScopedLocalRefFrame::~ScopedLocalRefFrame() {
+  jni_->PopLocalFrame(NULL);
+}
