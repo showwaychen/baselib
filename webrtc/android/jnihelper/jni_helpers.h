@@ -41,7 +41,10 @@ void SetJavaVM(JavaVM *javaVM);
 JavaVM * GetJavaVM();
 jmethodID GetMethodID(
     JNIEnv* jni, jclass c, const char* name, const char* signature);
-
+jclass GetObjectClass(JNIEnv* jni, jobject object);
+jfieldID GetFieldID(JNIEnv* jni, jclass c, const char* name,
+	const char* signature);
+jobject GetObjectField(JNIEnv* jni, jobject object, jfieldID id);
 jmethodID GetStaticMethodID(
     JNIEnv* jni, jclass c, const char* name, const char* signature);
 jclass FindClass(JNIEnv* jni, const char* name);

@@ -30,16 +30,7 @@ JNIEnv* GetEnv(JavaVM* jvm) {
 		//<< "Unexpected GetEnv return: " << status << ":" << env;
 	return reinterpret_cast<JNIEnv*>(env);
 }
-// Given a (UTF-16) jstring return a new UTF-8 native string.
-//std::string JavaToStdString(JNIEnv* jni, const jstring& j_string) {
-//	const char* chars = jni->GetStringUTFChars(j_string, nullptr);
-//	MYCHECK_EXCEPTION(jni, "Error during GetStringUTFChars");
-//	std::string str(chars, jni->GetStringUTFLength(j_string));
-//	MYCHECK_EXCEPTION(jni, "Error during GetStringUTFLength");
-//	jni->ReleaseStringUTFChars(j_string, chars);
-//	MYCHECK_EXCEPTION(jni, "Error during ReleaseStringUTFChars");
-//	return str;
-//}
+
  void SetJavaVM(JavaVM *javaVM)
 {
 	 sl_jvm = javaVM;
@@ -54,7 +45,22 @@ JNIEnv* GetEnv(JavaVM* jvm) {
   MYCHECK_EXCEPTION(jni, "Error during GetMethodID: ");
   return m;
 }
-
+ jclass GetObjectClass(JNIEnv* jni, jobject object) {
+	 jclass c = jni->GetObjectClass(object);
+	 MYCHECK_EXCEPTION(jni, "error during GetObjectClass");
+	 return c;
+ }
+ jfieldID GetFieldID(
+	 JNIEnv* jni, jclass c, const char* name, const char* signature) {
+	 jfieldID f = jni->GetFieldID(c, name, signature);
+	 MYCHECK_EXCEPTION(jni, "error during GetFieldID");
+	 return f;
+ }
+ jobject GetObjectField(JNIEnv* jni, jobject object, jfieldID id) {
+	 jobject o = jni->GetObjectField(object, id);
+	 MYCHECK_EXCEPTION(jni, "error during GetObjectField");
+	 return o;
+ }
 jmethodID GetStaticMethodID (
     JNIEnv* jni, jclass c, const char* name, const char* signature) {
   jmethodID m = jni->GetStaticMethodID(c, name, signature);
