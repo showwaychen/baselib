@@ -55,6 +55,7 @@ set (BASE_SOURCE_FILES  ${BASE_DIR}/sigslot.cc
 						${BASE_DIR}/asyncfile.cc
 						${BASE_DIR}/signalthread.cc
 						${BASE_DIR}/asyncresolverinterface.cc
+						${BASE_DIR}/bind.h
 					)
 set(BASEANDROID_DIR ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/android)					
 file(GLOB  BASE_ANDROIDSOURCE_FILES ${BASEANDROID_DIR}/jnihelper/*.cpp
