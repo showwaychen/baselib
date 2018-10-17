@@ -62,14 +62,15 @@ typedef void* SockOptArg;
 #if defined(WEBRTC_POSIX) && !defined(WEBRTC_MAC) && !defined(__native_client__)
 
 int64_t GetSocketRecvTimestamp(int socket) {
-  struct timeval tv_ioctl;
-  int ret = ioctl(socket, SIOCGSTAMP, &tv_ioctl);
-  if (ret != 0)
-    return -1;
-  int64_t timestamp =
-      rtc::kNumMicrosecsPerSec * static_cast<int64_t>(tv_ioctl.tv_sec) +
-      static_cast<int64_t>(tv_ioctl.tv_usec);
-  return timestamp;
+  // struct timeval tv_ioctl;
+  // int ret = ioctl(socket, SIOCGSTAMP, &tv_ioctl);
+  // if (ret != 0)
+  //   return -1;
+  // int64_t timestamp =
+  //     rtc::kNumMicrosecsPerSec * static_cast<int64_t>(tv_ioctl.tv_sec) +
+  //     static_cast<int64_t>(tv_ioctl.tv_usec);
+  // return timestamp;  can't compiler success on ios platmfor
+  return -1;
 }
 
 #else
@@ -576,7 +577,7 @@ int PhysicalSocket::TranslateOption(Option opt, int* slevel, int* sopt) {
       return -1;
 #elif defined(WEBRTC_POSIX)
       *slevel = IPPROTO_IP;
-      *sopt = IP_MTU_DISCOVER;
+      // *sopt = IP_MTU_DISCOVER; can't compiler success on ios platmfor
       break;
 #endif
     case OPT_RCVBUF:
