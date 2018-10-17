@@ -85,7 +85,9 @@ class Builder:
         return os.path.abspath(res)
 
     def _build(self, outdir):
+        print("outdir = " + outdir)
         outdir = os.path.abspath(outdir)
+        print("outdir whole = " + outdir)
         if not os.path.isdir(outdir):
             os.makedirs(outdir)
         mainWD = os.path.join(outdir, "build")
@@ -215,9 +217,12 @@ class Builder:
         os.system("mv " + builddir + "/Release-iphonesimulator  " +
                   builddir + "/Release")
         execute(["cmake", "-P", "cmake_install.cmake"], cwd=builddir)
-        distdir = self.opencv + "/ios"
-        mvshellcmd = "cp -R " + clean_dir + "/*  " + distdir
+        distdir = self.opencv + "/ios/lib"
+        if not os.path.exists(distdir):
+            os.mkdir(distdir)
+        mvshellcmd = "cp -R " + clean_dir + "/lib/*  " + distdir
         print(mvshellcmd)
+        # shutil.copytree(clean_dir, distdir)
         os.system(mvshellcmd)
 
     def mergeLibs(self, builddir):
