@@ -51,8 +51,6 @@ set (BASE_SOURCE_FILES  ${BASE_DIR}/sigslot.cc
 						${BASE_DIR}/asyncsocket.cc
 						${BASE_DIR}/socketaddress.h
 						${BASE_DIR}/socketaddress.cc
-						${BASE_DIR}/ifaddrs-android.h
-						${BASE_DIR}/ifaddrs-android.cc
 						${BASE_DIR}/ipaddress.h
 						${BASE_DIR}/ipaddress.cc
 						${BASE_DIR}/nethelpers.h
@@ -75,7 +73,9 @@ set (BASE_SOURCE_FILES  ${BASE_DIR}/sigslot.cc
 if(ANDROID)
 set (BASE_SOURCE_FILES  ${BASE_SOURCE_FILES} 
 						${BASE_DIR}/physicalsocketserver.h
-						${BASE_DIR}/physicalsocketserver.cc)
+						${BASE_DIR}/physicalsocketserver.cc
+						${BASE_DIR}/ifaddrs-android.h
+						${BASE_DIR}/ifaddrs-android.cc)
 set(BASEANDROID_DIR ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/android)					
 file(GLOB  BASE_ANDROIDSOURCE_FILES ${BASEANDROID_DIR}/jnihelper/*.cpp
 							   ${BASEANDROID_DIR}/jnihelper/*.h)
