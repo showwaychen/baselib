@@ -79,6 +79,8 @@ set (BASE_SOURCE_FILES  ${BASE_SOURCE_FILES}
 set(BASEANDROID_DIR ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/android)					
 file(GLOB  BASE_ANDROIDSOURCE_FILES ${BASEANDROID_DIR}/jnihelper/*.cpp
 							   ${BASEANDROID_DIR}/jnihelper/*.h)
+elseif(APPLE)
+    # list(REMOVE_ITEM ARL_SOURCES_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/AudioProcessorSource.cpp)
 endif()
 add_library( baselib
              STATIC

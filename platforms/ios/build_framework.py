@@ -121,7 +121,7 @@ class Builder:
             self.buildOne(t[0], t[1], mainBD, cmake_flags)
 
             # if self.dynamic == False:
-            # self.mergeLibs(mainBD)
+            self.mergeLibs(mainBD)
         # self.makeFramework(outdir, dirs)
 
     def build(self, outdir):
@@ -214,13 +214,20 @@ class Builder:
             shutil.rmtree(clean_dir)
         buildcmd = self.getBuildCommand(arch, target)
         execute(buildcmd + ["-target", "ALL_BUILD", "build"], cwd=builddir)
-        os.system("mv " + builddir + "/Release-iphonesimulator  " +
-                  builddir + "/Release")
+        if target.lower().startswith("iphoneos"):
+            os.system("mv " + builddir + "/Release-iphoneos  " +
+                      builddir + "/Release")
+        else:
+            os.system("mv " + builddir + "/Release-iphonesimulator  " +
+                      builddir + "/Release")
         execute(["cmake", "-P", "cmake_install.cmake"], cwd=builddir)
-        distdir = self.opencv + "/ios/lib"
+        distdir = self.opencv + "/ios/libtmp"
         if not os.path.exists(distdir):
             os.mkdir(distdir)
-        mvshellcmd = "cp -R " + clean_dir + "/lib/*  " + distdir
+            print("dir create " + distdir)
+        destlibname = distdir + "/" + arch[0] + "lib.a"
+        print(arch)
+        mvshellcmd = "cp -R " + clean_dir + "/lib/libbaselib.a  " + destlibname
         print(mvshellcmd)
         # shutil.copytree(clean_dir, distdir)
         os.system(mvshellcmd)
@@ -232,7 +239,13 @@ class Builder:
         # print("Merging libraries:\n\t%s" % "\n\t".join(libs + libs3), file=sys.stderr)
         # execute(["libtool", "-static", "-o", res] + libs + libs3)
         # print("Merging libraries:\n\t%s" % "\n\t".join(libs), file=sys.stderr)
-        execute(["libtool", "-static", "-o", res] + libs)
+        # execute(["libtool", "-static", "-o", res] + libs)
+        libs = glob.glob(os.path.join(self.opencv, "ios", "libtmp", "*.a"))
+        distdir = self.opencv + "/ios/lib"
+        if not os.path.exists(distdir):
+            os.mkdir(distdir)
+        res = distdir + "/libbaselib.a"
+        execute(["lipo", "-create", "-output", res] + libs)
 
     def makeFramework(self, outdir, builddirs):
         name = "baselib"
@@ -336,7 +349,8 @@ if __name__ == "__main__":
 
     b = iOSBuilder(args.baselib, args.contrib, args.dynamic, args.bitcodedisabled, args.without,
                    [
-                       (["x86_64"], "iPhoneSimulator")
+                       (["x86_64"], "iPhoneSimulator"),
+                       (["armv7", "armv7s", "arm64"], "iPhoneOS")
                    ])
     b.build(args.out)
     print(getXCodeMajor())
