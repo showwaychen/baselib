@@ -119,7 +119,6 @@ class Builder:
                 cmake_flags.append("-DCMAKE_C_FLAGS=-fembed-bitcode")
                 cmake_flags.append("-DCMAKE_CXX_FLAGS=-fembed-bitcode")
             self.buildOne(t[0], t[1], mainBD, cmake_flags)
-
             # if self.dynamic == False:
             self.mergeLibs(mainBD)
         # self.makeFramework(outdir, dirs)
@@ -221,15 +220,24 @@ class Builder:
             os.system("mv " + builddir + "/Release-iphonesimulator  " +
                       builddir + "/Release")
         execute(["cmake", "-P", "cmake_install.cmake"], cwd=builddir)
-        distdir = self.opencv + "/ios/libtmp"
-        if not os.path.exists(distdir):
-            os.mkdir(distdir)
-            print("dir create " + distdir)
-        destlibname = distdir + "/" + arch[0] + "lib.a"
+        distdir = self.opencv + "/ios/lib/" + arch[0]
+        if not os.path.isdir(distdir):
+            os.makedirs(distdir)
+        # if not os.path.exists(distdir):
+            # os.mkdir(distdir)  + arch[0]
+        print("dir create " + distdir)
+        destlibname = distdir + "/" + "libbaselib.a"
         print(arch)
         mvshellcmd = "cp -R " + clean_dir + "/lib/libbaselib.a  " + destlibname
         print(mvshellcmd)
         # shutil.copytree(clean_dir, distdir)
+        os.system(mvshellcmd)
+
+        distdir = self.opencv + "/ios/libtmp"
+        if not os.path.isdir(distdir):
+            os.mkdir(distdir)
+        destlibname = distdir + "/" + arch[0] + "lib.a"
+        mvshellcmd = "cp -R " + clean_dir + "/lib/libbaselib.a  " + destlibname
         os.system(mvshellcmd)
 
     def mergeLibs(self, builddir):
