@@ -97,7 +97,7 @@ target_link_libraries( baselib
 					  ${log-lib} )
 endif()
 if(ANDROID)
-# set (CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/android)
+set (CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/android)
 else(IOS)
 # set (CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/ios)
 endif()				  
