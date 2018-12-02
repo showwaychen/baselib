@@ -72,6 +72,8 @@ set (BASE_SOURCE_FILES  ${BASE_DIR}/sigslot.cc
 						${BASE_DIR}/physicalsocketserver.h
 						${BASE_DIR}/physicalsocketserver.cc
 					)
+file(EXTERANL_SRCFILE  ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/external/*.cpp
+						${CMAKE_CURRENT_SOURCE_DIR}/webrtc/external/*.h)
 if(ANDROID)
 set (BASE_SOURCE_FILES  ${BASE_SOURCE_FILES} 
 						${BASE_DIR}/physicalsocketserver.h
@@ -86,7 +88,7 @@ elseif(APPLE)
 endif()
 add_library( baselib
              STATIC
-             ${BASE_SOURCE_FILES} ${BASE_ANDROIDSOURCE_FILES} )
+             ${BASE_SOURCE_FILES} ${BASE_ANDROIDSOURCE_FILES} ${EXTERANL_SRCFILE})
 			 
 if(ANDROID)
 # 找到预编译库 log_lib 并link到我们的动态库 native-lib中
