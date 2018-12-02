@@ -72,7 +72,7 @@ set (BASE_SOURCE_FILES  ${BASE_DIR}/sigslot.cc
 						${BASE_DIR}/physicalsocketserver.h
 						${BASE_DIR}/physicalsocketserver.cc
 					)
-file(EXTERANL_SRCFILE  ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/external/*.cpp
+file(GLOB EXTERANL_SRCFILE  ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/external/*.cpp
 						${CMAKE_CURRENT_SOURCE_DIR}/webrtc/external/*.h)
 if(ANDROID)
 set (BASE_SOURCE_FILES  ${BASE_SOURCE_FILES} 
