@@ -22,7 +22,23 @@
         }                                                                           \
         return *reinterpret_cast<std::shared_ptr<clsname> *>(j_p);                  \
     }
+#define JNI_GETPTRINSTANCE_DECLAR(clsname) static clsname *GetInst(JNIEnv *jni, jobject j_object);
+#define JNI_GETPTRINSTANCE_IMPLEMENT(clsname)                                       \
+    clsname *clsname::GetInst(JNIEnv *jni, jobject j_object)                        \
+    {                                                                               \
+        jclass j_class = jni->GetObjectClass(j_object);                             \
+        jfieldID nativeobject_id = jni->GetFieldID(j_class, "m_NativeObject", "J"); \
+        MYCHECK_EXCEPTION(jni, "GetInst failed");                                   \
+        jlong j_p = jni->GetLongField(j_object, nativeobject_id);                   \
+        MYCHECK_EXCEPTION(jni, "GetInst failed");                                   \
+        if (j_p == 0)                                                               \
+        {                                                                           \
+            return nullptr;                                                         \
+        }                                                                           \
+        return reinterpret_cast<clsname *>(j_p);                                    \
+    }
 #define JNI_GETINSTANCE_STATEMENT(clsname) std::shared_ptr<clsname> instance = clsname::GetInst(env, thiz);
+#define JNI_GETPTRINSTANCE_STATEMENT(clsname) clsname *instance = clsname::GetInst(env, thiz);
 #define JNI_REGISTERNATIVE_DECLAR static CRegisterNativeM s_registernm;
 #define JNI_NATIVEMETHOD_BEGIN static JNINativeMethod ls_nm[] =
 #define JNI_NATIVEMETHOD_END ;
