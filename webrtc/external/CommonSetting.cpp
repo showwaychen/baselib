@@ -3,7 +3,7 @@
 #include "MemoryTrace.hpp"
 #include <fstream>
 #endif
-#include "Log.h"
+#include "webrtc/base/logging.h"
 void CCommonSetting::SetLogLevel(int level)
 {
 	rtc::LogMessage::SetMinLogSeverity((rtc::LoggingSeverity)level);

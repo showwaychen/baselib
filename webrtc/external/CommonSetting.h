@@ -2,10 +2,10 @@
 #define __COMMON_SETTING_H__
 #include <stdio.h>
 #include <stdint.h>
-#include "base/logging.h"
+#include "webrtc/base/logging.h"
 class CCommonSetting
 {
-  public:
+public:
 	static void SetLogLevel(int level);
 	static void StartLeakMemDetect();
 	static void StopLeakMemDetect();
