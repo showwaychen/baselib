@@ -3,11 +3,11 @@
 #include "webrtc/base/logging.h"
 #define SRTCLIB_TAG "srtclib"
 
-extern const char *TAG;
+extern const char *CURTAG;
 void SetTag(const std::string &tag);
 #define ALOG(sev)                       \
 	LOG_SEVERITY_PRECONDITION(rtc::sev) \
-	rtc::LogMessage(__FILE__, __LINE__, rtc::sev, TAG).stream()
+	rtc::LogMessage(__FILE__, __LINE__, rtc::sev, CURTAG).stream()
 
 #define LOGV \
 	ALOG(LS_VERBOSE)

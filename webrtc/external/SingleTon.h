@@ -17,3 +17,17 @@ class CSingleTon
 };
 template <class T>
 std::shared_ptr<T> CSingleTon<T>::s_Instance = nullptr;
+
+template <class T>
+class CSingleTonDeprecated
+{
+    static T s_Instance;
+
+  public:
+    static T *GetInst()
+    {
+        return &s_Instance;
+    }
+};
+template <class T>
+T CSingleTonDeprecated<T>::s_Instance;
