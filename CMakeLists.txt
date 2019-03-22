@@ -15,6 +15,7 @@ endif()
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")	
 #base
 set (BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/base)
+set (SYSTEM_WRAPPERS_DIR   ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/system_wrappers)
 set (BASE_SOURCE_FILES  ${BASE_DIR}/sigslot.cc
 						${BASE_DIR}/sigslot.h
                         ${BASE_DIR}/basictypes.h
@@ -71,6 +72,8 @@ set (BASE_SOURCE_FILES  ${BASE_DIR}/sigslot.cc
 						${BASE_DIR}/common.h
 						${BASE_DIR}/physicalsocketserver.h
 						${BASE_DIR}/physicalsocketserver.cc
+						${SYSTEM_WRAPPERS_DIR}/include/sleep.h
+						${SYSTEM_WRAPPERS_DIR}/source/sleep.cc
 					)
 file(GLOB EXTERANL_SRCFILE  ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/external/*.cpp
 						${CMAKE_CURRENT_SOURCE_DIR}/webrtc/external/*.h)
