@@ -1,31 +1,37 @@
-#include"jni_classloader.h"
+#include "jni_classloader.h"
 
 #include <android/log.h>
-#define CLASSLOAD_TAG              "classload"
-#define     _LOGI(...)          __android_log_print(ANDROID_LOG_INFO, CLASSLOAD_TAG, __VA_ARGS__)
-#define     _LOGD(...)          __android_log_print(ANDROID_LOG_DEBUG, CLASSLOAD_TAG, __VA_ARGS__)
-#define     _LOGW(...)          __android_log_print(ANDROID_LOG_WARN, CLASSLOAD_TAG, __VA_ARGS__)
-#define     _LOGE(...)          __android_log_print(ANDROID_LOG_ERROR, CLASSLOAD_TAG, __VA_ARGS__)
+#define CLASSLOAD_TAG "classload"
+#ifdef WEBRTC_DEBUG
+#define _LOGI(...) __android_log_print(ANDROID_LOG_INFO, CLASSLOAD_TAG, __VA_ARGS__)
+#define _LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, CLASSLOAD_TAG, __VA_ARGS__)
+#define _LOGW(...) __android_log_print(ANDROID_LOG_WARN, CLASSLOAD_TAG, __VA_ARGS__)
+#define _LOGE(...) __android_log_print(ANDROID_LOG_ERROR, CLASSLOAD_TAG, __VA_ARGS__)
+#else
+#define _LOGI(...)
+#define _LOGD(...)
+#define _LOGW(...)
+#define _LOGE(...)
+#endif
 
 //
 //char* g_classes[] = {
 //};
 
-ClassReferenceHolder* g_class_reference_holder = NULL;
+ClassReferenceHolder *g_class_reference_holder = NULL;
 
-bool LoadClasses(JNIEnv* jni)
+bool LoadClasses(JNIEnv *jni)
 {
 	_LOGI("load all classes start");
 	if (jni == NULL)
 	{
 		return false;
 	}
-	g_class_reference_holder = new ClassReferenceHolder(jni, NULL,0);
+	g_class_reference_holder = new ClassReferenceHolder(jni, NULL, 0);
 	return true;
 }
 
-
-void ReleaseClasses(JNIEnv* jni)
+void ReleaseClasses(JNIEnv *jni)
 {
 	if (jni == NULL)
 	{
@@ -38,20 +44,18 @@ void ReleaseClasses(JNIEnv* jni)
 	}
 }
 
-
-void RegisterNativeMethods(JNIEnv* jni)
+void RegisterNativeMethods(JNIEnv *jni)
 {
 	_LOGI("RegisterNativeMethods start");
 	CRegisterNativeM::RegisterAllNativeMethods(jni);
 	_LOGI("RegisterNativeMethods over");
 }
 
-
-std::vector<SRegisterNativeData*> CRegisterNativeM::s_nativemethods;
-static SRegisterNativeData* ls_srnd[100] = {0};
+std::vector<SRegisterNativeData *> CRegisterNativeM::s_nativemethods;
+static SRegisterNativeData *ls_srnd[100] = {0};
 static int ls_srndindex = 0;
 
-void CRegisterNativeM::RegisterAllNativeMethods(JNIEnv* jni)
+void CRegisterNativeM::RegisterAllNativeMethods(JNIEnv *jni)
 {
 	if (jni == NULL)
 	{
@@ -74,7 +78,7 @@ void CRegisterNativeM::RegisterAllNativeMethods(JNIEnv* jni)
 	//first load all classes
 	for (int i = 0; i < ls_srndindex; i++)
 	{
-		g_class_reference_holder->LoadClass(jni, ls_srnd[i]->m_classname); 
+		g_class_reference_holder->LoadClass(jni, ls_srnd[i]->m_classname);
 		_LOGI("index = %d classes name = %s", ls_srndindex, ls_srnd[i]->m_classname.c_str());
 	}
 	//second registe all native methods;
@@ -85,8 +89,9 @@ void CRegisterNativeM::RegisterAllNativeMethods(JNIEnv* jni)
 			jclass clz = g_class_reference_holder->GetClass(ls_srnd[i]->m_classname);
 			if (clz != NULL)
 			{
-				if (jni->RegisterNatives(clz, ls_srnd[i]->m_nativem, ls_srnd[i]->m_nnum)) {
-					_LOGE("class : %s   methods not registered", ls_srnd[i]->m_classname.c_str());
+				if (jni->RegisterNatives(clz, ls_srnd[i]->m_nativem, ls_srnd[i]->m_nnum))
+				{
+					_LOGI("class : %s   methods not registered", ls_srnd[i]->m_classname.c_str());
 				}
 				else
 				{
@@ -97,10 +102,10 @@ void CRegisterNativeM::RegisterAllNativeMethods(JNIEnv* jni)
 	}
 }
 
-CRegisterNativeM::CRegisterNativeM(const char* classname, JNINativeMethod* nativem, int nativemnum)
+CRegisterNativeM::CRegisterNativeM(const char *classname, JNINativeMethod *nativem, int nativemnum)
 {
 	_LOGI("CRegisterNativeM %s", classname);
-	SRegisterNativeData* temdata = new SRegisterNativeData;
+	SRegisterNativeData *temdata = new SRegisterNativeData;
 	temdata->m_classname.assign(classname);
 	temdata->m_nativem = nativem;
 	temdata->m_nnum = nativemnum;
@@ -108,7 +113,4 @@ CRegisterNativeM::CRegisterNativeM(const char* classname, JNINativeMethod* nativ
 	ls_srnd[ls_srndindex] = temdata;
 	ls_srndindex++;
 	_LOGI("CRegisterNativeM end %s   all size = %d", classname, s_nativemethods.size());
-
 }
-
-

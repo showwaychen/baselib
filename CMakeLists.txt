@@ -72,6 +72,9 @@ set (BASE_SOURCE_FILES  ${BASE_DIR}/sigslot.cc
 						${BASE_DIR}/common.h
 						${BASE_DIR}/physicalsocketserver.h
 						${BASE_DIR}/physicalsocketserver.cc
+						${BASE_DIR}/md5.cc
+						${BASE_DIR}/md5digest.cc
+						${BASE_DIR}/messagedigest.cc
 						${SYSTEM_WRAPPERS_DIR}/include/sleep.h
 						${SYSTEM_WRAPPERS_DIR}/source/sleep.cc
 					)
