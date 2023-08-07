@@ -12,6 +12,10 @@ message("build type is ${CMAKE_BUILD_TYPE}")
 add_definitions(-DWEBRTC_IOS -DWEBRTC_POSIX)
 #SET (IPHONE_SDKROOT "${IPHONE_DEVROOT}/SDKs/iPhoneSimulator${IPHONE_SDKVER}.sdk")
 endif()
+if(WIN32)
+message("current is windows")
+add_definitions(-DWEBRTC_WIN)
+endif()
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")	
 #base
 set (BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/base)
@@ -31,8 +35,6 @@ set (BASE_SOURCE_FILES  ${BASE_DIR}/sigslot.cc
 						${BASE_DIR}/socketserver.h
 						${BASE_DIR}/nullsocketserver.h
 						${BASE_DIR}/nullsocketserver.cc
-						${BASE_DIR}/logging.cc
-						${BASE_DIR}/logging.h
 						${BASE_DIR}/location.h
 						${BASE_DIR}/location.cc
 						${BASE_DIR}/criticalsection.h
@@ -85,7 +87,10 @@ set (BASE_SOURCE_FILES  ${BASE_SOURCE_FILES}
 						${BASE_DIR}/physicalsocketserver.h
 						${BASE_DIR}/physicalsocketserver.cc
 						${BASE_DIR}/ifaddrs-android.h
-						${BASE_DIR}/ifaddrs-android.cc)
+						${BASE_DIR}/ifaddrs-android.cc
+						${BASE_DIR}/logging.cc
+						${BASE_DIR}/logging.h
+						)
 set(BASEANDROID_DIR ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/android)					
 file(GLOB  BASE_ANDROIDSOURCE_FILES ${BASEANDROID_DIR}/jnihelper/*.cpp
 							   ${BASEANDROID_DIR}/jnihelper/*.h)
