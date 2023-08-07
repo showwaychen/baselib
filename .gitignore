@@ -1,0 +1,4 @@
+android/arm64-v8a/lib/libbaselib.a
+android/armeabi-v7a/lib/libbaselib.a
+android/lib/libbaselib.a
+Build
